@@ -1,272 +1,272 @@
-.model small     
 .stack 100h
-.data
+.model small
+.data 
+      
+       I DW "Here is our student ID$"
+      
+       s dw "                !!!!!!!!WELCOME TO OUR STUDENT DATABASE!!!!!!!!$"
+      
+       T DW "THANK YOU.$"
 
-    m0 dw "         !!!!!!Welcome to our restaurant management system!!!!!!$"
-    m1 dw 10,13,10,13, "Which menu do you want ??please select:$"
-    m2 dw 10,13,10,13, "1.Rice 10/- 2.Chiken 50/- 3.Egg 20/- $"
-    m3 dw 10,13,10,13, "Select the menu number:$"       
-    m4 dw 10,13,10,13, "SORRY!!!There is no more than 3 item,so select the item$"
-    m5 dw 10,13,10,13, "Enter quantity:$" 
-    m6 dw 10,13,10,13, "Total price: $"  
-    m7 dw 10,13,10,13, " Re-odrer : Press <1>$",
-    m8 dw 10,13,10,13, " Exit : Press Any key$"
-    rice_price dw 10
-    chiken_price dw 50
-    egg_price dw 20
-m9 dw 10,13,10,13, "      *****THANK YOU*****$"       
+       m1 dw "Please Enter the ID You Want to Find : $" 
+    
+       i1 dw "1.171-15-1151  2.171-15-1181  3.171-15-1408  4.171-15-1478$"
+     
+       N DW "SORRY ! YOUR ID IS NOT FOUND $"
+       NA DW "DO YOU WANT TO CONTINUE??  PRESS Y OR PRESS ANY KEY TO EXIT. $"
+    
+       m2 dw "Name : Khadiza Khanom Meem $" 
+       m3 dw "Mobile : 01736355306$" 
+       m4 dw "Dept : Computer Science and Engineering $" 
+        
+       m5 dw "Name : Farzana Hasnat Mou $" 
+       m6 dw "Mobile : 01736355306$" 
+      
+      
+       m8 dw "Name : Md. Abdul Halim $" 
+       m9 dw "Mobile : 01736355306$" 
+     
+      
+       m11 dw "Name : Sadia Afrin Tisha $" 
+       m12 dw "Mobile : 01736355306$" 
+    
 .code
-    main proc
+        main proc
         
         mov ax,@data
         mov ds,ax
         
+        
+        lea dx,S
         mov ah,9
-        Lea dx,m0
+        int 21h  
+        CALL NEWLINE
+        
+        
+        FIRST:
+       
+        CALL NEWLINE
+        
+        lea dx,i
+        mov ah,9
+        int 21h
+        
+        call newline 
+        call newline
+          
+        ;msg
+        lea dx,I1
+        mov ah,9
+        int 21h 
+        
+        CALL NEWLINE 
+        CALL NEWLINE 
+        
+        ;msg
+        lea dx,m1
+        mov ah,9
         int 21h  
         
-        start:
-        
-        mov ah,9
-        Lea dx,m1
-        int 21h
-        
-        menu:
-        
-        mov ah,9
-        Lea dx,m2
-        int 21h
-        
-        mov ah,9
-        Lea dx,m3
-        int 21h
-        
+        ;scan
         mov ah,1
-        int 21h        
-        
-        cmp al,'1'
-        je rice
-        cmp al,'2'
-        je chiken
-        cmp al,'3'
-        je egg
-       
-        menuadd:
-   
-        mov ah,9
-        lea dx,m4
-        int 21h 
-   
-        mov ah,9
-        Lea dx,m2
-        int 21h 
-        
-        mov ah,9
-        lea dx,m3
         int 21h
         
-        mov ah,1
-        int 21h        
+        mov bl,al 
         
-        cmp al,'1'
-        je rice
-        cmp al,'2'
-        je chiken
-        cmp al,'3'
-        je egg
+        cmp bl,'1'
+        je meem
         
-       
+        cmp bl,'2'
+        je mou
         
-        chiken:
+        cmp bl,'3'
+        je abdulhalim
         
-            mov ah,9
-            Lea dx,m5
-            int 21h
-            
-            xor ax,ax             
-            call input
-            mul chiken_price  
-            mov bx,ax
-            jmp totalprice
         
-        rice:
-        
-            mov ah,9
-            Lea dx,m5
-            int 21h 
-            
-            xor ax,ax            
-            call input    
-            mul rice_price          
-            mov bx,ax 
-            jmp totalprice 
-            
-        egg:    
-            mov ah,9
-            Lea dx,m5
-            int 21h 
-            
-            xor ax,ax    
-            call input   
-            mul egg_price 
-            mov bx,ax
-            jmp totalprice 
-                    
-        totalprice:
+        cmp bl,'4'
+        je tisha 
+        CALL NEWLINE
+        CALL NEWLINE
+          
+        lea dx,N
+        mov ah,9
+        int 21h
+          
+        CALL NEWLINE
+        CALL NEWLINE 
+
+        lea dx,na
+        mov ah,9
+        int 21h 
          
-            mov ah,9
-            Lea dx,m6
-            int 21h 
-            
-            xor ax,ax          
-            mov ax,bx
-            call output
-            
-            mov ah,9
-            Lea dx,m7
-            int 21h
-            
-            mov ah,9
-            Lea dx,m8
-            int 21h
-            
-            mov ah,1
-            int 21h
-            
-            cmp al,'1'
-            je start                
-            
-            mov ah,9
-            Lea dx,m9
-            int 21h
-            jmp exit
-        
-            exit:
-        main endp 
-
-        OUTPUT PROC    
-
-    PUSH  AX
-    PUSH  BX
-    PUSH  CX
-    PUSH  DX
-
-OR AX, AX
-JGE END_IF1
-
-PUSH AX 
-MOV AH, 2
-MOV DL, ' '
-
-INT 21H
-POP AX
-NEG AX
-
-END_IF1:
-
-    XOR CX, CX
-    MOV  BX, 10D
-
-REPEAT1: 
-
-    XOR DX, DX
-    DIV BX
-    PUSH DX
-    INC CX
-
-
-    OR  AX, AX
-    JNE   REPEAT1
-    
-    MOV   AH, 2
-
-PRINT_LOOP:
-
-   POP  DX
-   OR DL, 30H
-   INT 21H
-   LOOP  PRINT_LOOP
-
-   POP DX
-   POP CX
-   POP BX
-   POP AX
-
-RET
-OUTPUT ENDP
+        ;scan
+        mov ah,1
+        int 21h 
+          
+        MOV CL,AL
              
-         INPUT PROC 
+        cmp Cl,'Y'
+        je EXIT
+              
+        JMP END
+             
+        CALL NEWLINE
 
-PUSH BX
-PUSH CX
-PUSH DX
-BEGIN:
-
-MOV AH, 2
-MOV DL, ' '
-INT 21H
-
-XOR BX, BX
-XOR CX, CX
-
-MOV AH, 1
-INT 21H
-
-CMP AL, '-'
-JE MINUS
-
-CMP AL, '+'
-JE PLUS
-JMP REPEAT2
-
-MINUS:
-MOV CX, 1
-PLUS:
-INT 21H
-
-REPEAT2:
-
-CMP AL, '0'     
-JNGE NOT_DIGIT 
-
-CMP AL, '9'   
-
-JNLE NOT_DIGIT
-
-AND AX, 000FH
-PUSH AX
-
-MOV AX,10
-MUL BX
-POP BX
-ADD BX, AX
-
-MOV AH, 1
-INT 21H
-CMP AL, 0DH
-JNE REPEAT2
-
-MOV AX, BX
-OR CX, CX
+        meem:
+        call newline
+        call newline
+        
+        lea dx,m2
+        mov ah,9
+        int 21h
+        
+        call newline
+        
+        lea dx,m3
+        mov ah,9
+        int 21h 
+        
+        call newline
+        
+        lea dx,m4
+        mov ah,9
+        int 21h
+        
+        call newline 
+        call newline
+        call newline
+           
+        jmp m 
+            
+               
+        mou:
+        call newline
+        call newline
+        call newline
+        
+        lea dx,m5
+        mov ah,9
+        int 21h
+        
+        call newline
+        
+        lea dx,m6
+        mov ah,9
+        int 21h 
+        
+        call newline
+        
+        lea dx,m4
+        mov ah,9
+        int 21h 
+        
+        call newline
+        call newline
+        call newline
        
-JE EXIT1
-NEG AX
+        jmp m 
+       
+        abdulhalim:
+        call newline
+        call newline
+        call newline
+        
+        lea dx,m8
+        mov ah,9
+        int 21h
+        
+        call newline
+        
+        lea dx,m9
+        mov ah,9
+        int 21h
+         
+        call newline
+        
+        lea dx,m4
+        mov ah,9
+        int 21h 
+        
+        call newline
+        call newline
+        call newline
+       
+        jmp m 
+       
+       
+       
+       
+        tisha:
+        call newline
+        call newline
+        call newline
+        
+        lea dx,m11
+        mov ah,9
+        int 21h
+        
+        call newline
+        
+        lea dx,m12
+        mov ah,9
+        int 21h
+         
+        call newline
+        
+        lea dx,m4
+        mov ah,9
+        int 21h 
+        
+        call newline 
+        call newline
+        call newline
+         
+        jmp m   
+           
+        m:  
+             
+        lea dx,Na
+        mov ah,9
+        int 21h
+          
+        mov ah,1
+        int 21h
+        mov bh,al
+        
+        CALL NEWLINE
+        CALL NEWLINE 
+      
+        cmp bh,'Y'
+        je exit
+      
+        CALL NEWLINE
+        CALL NEWLINE
+             
+        jmp end  
+             
+        exit: 
+        call newline   
+        call newline    
+        jmp FIRST 
+           
+           
+        END:
+        lea dx,T
+        mov ah,9
+        int 21h
+           
+        main endp
+    
+        newline proc 
+            
+        mov ah,2
+        mov dl,0dh
+        int 21h
+        mov dl,0ah
+        int 21h
+           
+        ret
 
-EXIT1:
-
-POP DX
-POP CX
-POP BX
-RET
-
-NOT_DIGIT:
-
-MOV AH, 2
-MOV DL, 0DH
-INT 21H
-MOV DL, 0AH
-INT 21H
-JMP BEGIN
-INPUT ENDP 
-  
     end main
+    
+    
